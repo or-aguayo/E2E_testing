@@ -28,14 +28,24 @@ La base de datos SQLite se almacena en `backend/app/vet_clinic.db` y se monta co
 ## Variables de entorno
 - `VITE_API_BASE_URL`: URL base para consumir la API desde el frontend (por defecto `http://localhost:8000`).
 
-## Pruebas E2E con Checksum
+## Pruebas E2E con Cypress
 
-El archivo `checksum.yml` describe el orquestador de servicios y el flujo de Cypress para validar el ciclo completo de la veterinaria.
+Las pruebas de extremo a extremo viven en `frontend/cypress/e2e/full-cycle.cy.js` y automatizan el flujo completo de la aplicación: registro de dueños, registro de mascotas y agendamiento de horas médicas.
 
-1. Asegúrate de contar con la [CLI de Checksum](https://checksum.ai/) instalada y autenticada.
-2. Ejecuta `checksum run --check "Flujo completo: dueño, mascota y hora"` desde la raíz del repositorio.
+Para ejecutarlas de forma local:
 
-La configuración levanta el backend de FastAPI y el frontend de Vite, ejecuta las pruebas de Cypress incluidas en `frontend/cypress/e2e/full-cycle.cy.js` y finaliza reportando el resultado en Checksum.
+1. Inicia los servicios necesarios. Puedes utilizar `docker-compose up --build` desde la raíz del repositorio o levantar backend y frontend manualmente:
+   - Backend: `cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8000`
+   - Frontend: `cd frontend && npm install && npm run dev -- --host 0.0.0.0 --port 5173`
+2. En otra terminal, ejecuta las pruebas desde el directorio `frontend`:
+
+```bash
+cd frontend
+npm install
+npm run test:e2e
+```
+
+Por defecto Cypress asume que el frontend está disponible en `http://localhost:5173`. Si necesitas apuntar a otra URL puedes definir `CYPRESS_BASE_URL`. Para conectar con una API alojada en otro host expón la variable `CYPRESS_apiUrl` antes de ejecutar las pruebas.
 
 ## Desarrollo local sin Docker
 
