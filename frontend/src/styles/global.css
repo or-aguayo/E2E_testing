@@ -1,0 +1,27 @@
+:root {
+  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #79f1a4 0%, #0e5cad 100%);
+  min-height: 100vh;
+  color: #1f2933;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top left, rgba(255,255,255,0.4), transparent 40%),
+    radial-gradient(circle at bottom right, rgba(255,255,255,0.4), transparent 45%),
+    linear-gradient(135deg, #79f1a4 0%, #0e5cad 100%);
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#root {
+  min-height: 100vh;
+}
