@@ -28,6 +28,15 @@ La base de datos SQLite se almacena en `backend/app/vet_clinic.db` y se monta co
 ## Variables de entorno
 - `VITE_API_BASE_URL`: URL base para consumir la API desde el frontend (por defecto `http://localhost:8000`).
 
+## Pruebas E2E con Checksum
+
+El archivo `checksum.yml` describe el orquestador de servicios y el flujo de Cypress para validar el ciclo completo de la veterinaria.
+
+1. Asegúrate de contar con la [CLI de Checksum](https://checksum.ai/) instalada y autenticada.
+2. Ejecuta `checksum run --check "Flujo completo: dueño, mascota y hora"` desde la raíz del repositorio.
+
+La configuración levanta el backend de FastAPI y el frontend de Vite, ejecuta las pruebas de Cypress incluidas en `frontend/cypress/e2e/full-cycle.cy.js` y finaliza reportando el resultado en Checksum.
+
 ## Desarrollo local sin Docker
 
 ### Backend

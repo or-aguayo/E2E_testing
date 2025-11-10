@@ -26,7 +26,12 @@ export function OwnerForm({ onSubmit }) {
       <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>
         Registrar nuevo dueño
       </Typography>
-      <Box component="form" onSubmit={handleSubmit} sx={{ display: 'grid', gap: 2 }}>
+      <Box
+        component="form"
+        data-cy="owner-form"
+        onSubmit={handleSubmit}
+        sx={{ display: 'grid', gap: 2 }}
+      >
         <TextField
           label="Nombre completo"
           name="name"
