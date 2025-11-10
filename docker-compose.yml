@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  backend:
+    build: ./backend
+    container_name: veterinaria-backend
+    volumes:
+      - ./backend/app/vet_clinic.db:/app/app/vet_clinic.db
+    ports:
+      - "8000:8000"
+    environment:
+      - TZ=America/Santiago
+  frontend:
+    build: ./frontend
+    container_name: veterinaria-frontend
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8000
+      - VITE_PROXY_TARGET=http://backend:8000
