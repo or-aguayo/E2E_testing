@@ -26,7 +26,6 @@ La API quedará disponible en `http://localhost:8000/docs` y el frontend en `htt
 La base de datos SQLite se almacena en `backend/app/vet_clinic.db` y se monta como volumen para mantener los datos.
 
 ## Variables de entorno
-
 - `VITE_API_BASE_URL`: URL base para consumir la API desde el frontend (por defecto `http://localhost:8000`).
 
 ## Desarrollo local sin Docker
