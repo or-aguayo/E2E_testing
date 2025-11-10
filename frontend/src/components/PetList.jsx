@@ -3,7 +3,11 @@ import PetsIcon from '@mui/icons-material/Pets'
 
 export function PetList({ pets, selectedPet, onSelect }) {
   return (
-    <Paper elevation={3} sx={{ p: 2, background: 'rgba(255,255,255,0.9)', height: '100%' }}>
+    <Paper
+      data-cy="pet-list"
+      elevation={3}
+      sx={{ p: 2, background: 'rgba(255,255,255,0.9)', height: '100%' }}
+    >
       <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>
         Mascotas del dueño
       </Typography>

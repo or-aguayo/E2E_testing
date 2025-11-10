@@ -1,0 +1,30 @@
+version: "1.0"
+project: "veterinaria-feliz"
+description: "Pruebas E2E de Cypress orquestadas por Checksum para el flujo completo de la clínica."
+
+setup:
+  - name: Instalar dependencias del frontend
+    command: npm install
+    cwd: frontend
+
+services:
+  backend:
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    cwd: backend
+    readiness:
+      url: http://localhost:8000/docs
+      status: 200
+  frontend:
+    command: npm run dev -- --host 0.0.0.0 --port 5173
+    cwd: frontend
+    readiness:
+      url: http://localhost:5173
+      status: 200
+
+checks:
+  - name: "Flujo completo: dueño, mascota y hora"
+    description: "Valida que se pueda crear un dueño, asociar una mascota y agendar una hora médica."
+    command: npx cypress run --config-file cypress.config.js --spec cypress/e2e/full-cycle.cy.js
+    cwd: frontend
+    env:
+      CYPRESS_apiUrl: http://localhost:8000

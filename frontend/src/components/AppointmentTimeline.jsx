@@ -8,7 +8,11 @@ dayjs.locale('es')
 export function AppointmentTimeline({ appointments }) {
   if (!appointments.length) {
     return (
-      <Card elevation={3} sx={{ background: 'rgba(255,255,255,0.9)' }}>
+      <Card
+        data-cy="appointment-timeline-empty"
+        elevation={3}
+        sx={{ background: 'rgba(255,255,255,0.9)' }}
+      >
         <CardContent>
           <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
             Historial de horas
@@ -22,7 +26,7 @@ export function AppointmentTimeline({ appointments }) {
   }
 
   return (
-    <Stack spacing={2}>
+    <Stack data-cy="appointment-timeline" spacing={2}>
       {appointments.map((appointment) => (
         <Card key={appointment.id} elevation={4} sx={{ background: 'rgba(255,255,255,0.95)' }}>
           <CardContent>
