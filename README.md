@@ -26,8 +26,7 @@ La API quedará disponible en `http://localhost:8000/docs` y el frontend en `htt
 La base de datos SQLite se almacena en `backend/app/vet_clinic.db` y se monta como volumen para mantener los datos.
 
 ## Variables de entorno
-
-- `VITE_API_BASE_URL`: URL base para consumir la API desde el frontend (por defecto `http://backend:8000`).
+- `VITE_API_BASE_URL`: URL base para consumir la API desde el frontend (por defecto `http://localhost:8000`).
 
 ## Desarrollo local sin Docker
 
@@ -49,7 +48,7 @@ npm install
 npm run dev
 ```
 
-> **Nota:** el archivo `vite.config.js` ya incluye un proxy para `/api` apuntando al servicio del backend.
+> **Nota:** el frontend apunta por defecto a `http://localhost:8000`. Si necesitas utilizar otra URL (por ejemplo en despliegues remotos), define `VITE_API_BASE_URL`. Para escenarios de desarrollo avanzados puedes ajustar el proxy del dev server mediante `VITE_PROXY_TARGET`.
 
 ## Endpoints principales
 
