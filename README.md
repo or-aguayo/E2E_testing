@@ -60,8 +60,8 @@ k6 run performance/k6-load-test.js
 ```
 
 No es obligatorio contar con Prometheus o Grafana para correr el script: si solo exportas `BASE_URL`, k6 imprimirá todas las métricas
-en la terminal. Consulta [performance/README.md](performance/README.md) para obtener instrucciones detalladas y ejemplos de integración
-con Grafana Cloud o instancias propias.
+en la terminal. Si quieres persistirlas, Grafana Cloud ofrece un endpoint de **remote write** listo para recibir las métricas; consulta
+[performance/README.md](performance/README.md) para ver los pasos concretos de integración y ejemplos para instancias propias.
 
 ## Desarrollo local sin Docker
 

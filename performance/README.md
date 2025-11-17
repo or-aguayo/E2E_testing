@@ -62,6 +62,31 @@ docker run --rm -i \
   grafana/k6 run /scripts/k6-load-test.js
 ```
 
+### Conectando k6 con Grafana Cloud
+
+Si ya creaste una cuenta en Grafana Cloud no necesitas desplegar tu propio Prometheus: cada _stack_ incluye un endpoint de _remote write_ que acepta las métricas exportadas por k6. Sigue estos pasos:
+
+1. En el portal de Grafana Cloud, ingresa a **Connections → Add new connection → Prometheus** y haz clic en **Send metrics** para tu stack.
+2. Copia los valores que aparecen en la sección **Send via remote write**:
+   - `Remote write endpoint`: úsalo en `K6_PROMETHEUS_RW_SERVER_URL`.
+   - `Username`: corresponde al **Instance ID** del Prometheus gestionado y debe asignarse a `K6_PROMETHEUS_RW_USERNAME`.
+   - `Password`: genera o reutiliza un **API Token** con permisos para métricas y asígnalo a `K6_PROMETHEUS_RW_PASSWORD`.
+3. Exporta esas variables junto con `BASE_URL` y `K6_OUT=experimental-prometheus-rw` antes de ejecutar k6. Puedes hacerlo tanto en tu máquina como dentro del contenedor oficial:
+
+   ```bash
+   export BASE_URL=http://localhost:8000
+   export K6_OUT=experimental-prometheus-rw
+   export K6_PROMETHEUS_RW_SERVER_URL=https://prometheus-prod-XX.grafana.net/api/prom/push
+   export K6_PROMETHEUS_RW_USERNAME=123456
+   export K6_PROMETHEUS_RW_PASSWORD=glc_XXXXXXXXXXXXXXXXXX
+
+   k6 run performance/k6-load-test.js
+   ```
+
+4. Vuelve al portal de Grafana Cloud y agrega el data source **Prometheus** (si no existe) apuntando al mismo endpoint. Crea o edita un dashboard y selecciona las métricas `k6_*` o las personalizadas (`owner_creation_duration`, etc.) para graficarlas en tiempo real.
+
+> Consejo: para distinguir múltiples ejecuciones puedes añadir etiquetas dinámicas a k6 con `-e K6_TAGS="env=qa,owner=grafana-cloud"` y utilizarlas como filtros en tus paneles.
+
 Con esta configuración las métricas se enviarán directamente a tu data source en Grafana, permitiéndote construir dashboards de rendimiento y alertas.
 
 ## Consejos de interpretación
