@@ -66,7 +66,10 @@ function createOwner() {
   const suffix = randomSuffix();
   const payload = {
     name: `Dueño ${suffix}`,
-    email: `loadtest+${suffix}@vetfeliz.test`,
+    // Algunos validadores de email (como el que usa FastAPI via Pydantic) rechazan
+    // dominios reservados como .test, por lo que utilizamos un dominio válido
+    // para evitar respuestas 422 por "email inválido" al generar datos sintéticos.
+    email: `loadtest+${suffix}@vetfeliz.cl`,
     phone: `+56${Math.floor(100000000 + Math.random() * 899999999)}`,
   };
   const res = http.post(`${BASE_URL}/owners`, JSON.stringify(payload), HEADERS);
