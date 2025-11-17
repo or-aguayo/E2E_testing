@@ -11,10 +11,6 @@ El script [`k6-load-test.js`](./k6-load-test.js) automatiza un flujo de extremo 
 3. **Agendamiento de hora médica** para la mascota (`POST /pets/{pet_id}/appointments`).
 4. Validación de las lecturas (`GET /owners`, `GET /owners/{owner_id}/pets`, `GET /pets/{pet_id}/appointments`).
 
-> Nota: los correos sintéticos que genera el script utilizan el dominio `vetfeliz.cl` para
-> cumplir con el validador `EmailStr` del backend (algunos dominios reservados como `.test`
-> se consideran inválidos y provocarían respuestas `422`).
-
 Dentro del mismo archivo se declaran dos escenarios de ejecución:
 
 - `load`: rampa progresiva de solicitudes para validar el comportamiento sostenido del sistema.
