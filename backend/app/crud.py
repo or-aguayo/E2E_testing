@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List, Optional
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from . import models, schemas
 
@@ -14,8 +14,17 @@ def create_owner(db: Session, owner: schemas.OwnerCreate) -> models.Owner:
     return db_owner
 
 
-def get_owners(db: Session) -> List[models.Owner]:
-    return db.query(models.Owner).all()
+def get_owners(db: Session, skip: int = 0, limit: int = 100) -> List[models.Owner]:
+    return (
+        db.query(models.Owner)
+        .options(
+            selectinload(models.Owner.pets).selectinload(models.Pet.appointments)
+        )
+        .order_by(models.Owner.id.desc())
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
 
 
 def get_owner(db: Session, owner_id: int) -> Optional[models.Owner]:
@@ -39,8 +48,18 @@ def get_pet(db: Session, pet_id: int) -> Optional[models.Pet]:
     return db.query(models.Pet).filter(models.Pet.id == pet_id).first()
 
 
-def get_pets_by_owner(db: Session, owner_id: int) -> List[models.Pet]:
-    return db.query(models.Pet).filter(models.Pet.owner_id == owner_id).all()
+def get_pets_by_owner(
+    db: Session, owner_id: int, skip: int = 0, limit: int = 100
+) -> List[models.Pet]:
+    return (
+        db.query(models.Pet)
+        .options(selectinload(models.Pet.appointments))
+        .filter(models.Pet.owner_id == owner_id)
+        .order_by(models.Pet.id.desc())
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
 
 
 def create_appointment_for_pet(
@@ -63,14 +82,26 @@ def create_appointment_for_pet(
     return db_appointment
 
 
-def get_appointments_for_pet(db: Session, pet_id: int) -> List[models.Appointment]:
+def get_appointments_for_pet(
+    db: Session, pet_id: int, skip: int = 0, limit: int = 100
+) -> List[models.Appointment]:
     return (
         db.query(models.Appointment)
         .filter(models.Appointment.pet_id == pet_id)
         .order_by(models.Appointment.scheduled_at.desc())
+        .offset(skip)
+        .limit(limit)
         .all()
     )
 
 
-def get_appointments(db: Session) -> List[models.Appointment]:
-    return db.query(models.Appointment).order_by(models.Appointment.scheduled_at.desc()).all()
+def get_appointments(
+    db: Session, skip: int = 0, limit: int = 100
+) -> List[models.Appointment]:
+    return (
+        db.query(models.Appointment)
+        .order_by(models.Appointment.scheduled_at.desc())
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
