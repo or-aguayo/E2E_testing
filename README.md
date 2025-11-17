@@ -47,6 +47,22 @@ npm run test:e2e
 
 Por defecto Cypress asume que el frontend está disponible en `http://localhost:5173`. Si necesitas apuntar a otra URL puedes definir `CYPRESS_BASE_URL`. Para conectar con una API alojada en otro host expón la variable `CYPRESS_apiUrl` antes de ejecutar las pruebas.
 
+## Pruebas de carga y estrés con Grafana k6
+
+Para validar el rendimiento de los flujos críticos (registro de dueños, mascotas y horas médicas) se agregó un script de k6 en [`performance/k6-load-test.js`](performance/k6-load-test.js). El archivo define escenarios de carga progresiva y estrés que pueden ejecutarse localmente o desde el contenedor oficial `grafana/k6`, enviando métricas a Grafana mediante `experimental-prometheus-rw`.
+
+Pasos rápidos:
+
+```bash
+# Backend en marcha (por ejemplo con docker-compose up)
+BASE_URL=http://localhost:8000 \
+k6 run performance/k6-load-test.js
+```
+
+No es obligatorio contar con Prometheus o Grafana para correr el script: si solo exportas `BASE_URL`, k6 imprimirá todas las métricas
+en la terminal. Si quieres persistirlas, Grafana Cloud ofrece un endpoint de **remote write** listo para recibir las métricas; consulta
+[performance/README.md](performance/README.md) para ver los pasos concretos de integración y ejemplos para instancias propias.
+
 ## Desarrollo local sin Docker
 
 ### Backend
