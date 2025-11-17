@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List, Optional
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 
 
 class AppointmentBase(BaseModel):
@@ -36,7 +36,7 @@ class PetCreate(PetBase):
 class Pet(PetBase):
     id: int
     owner_id: int
-    appointments: List[Appointment] = []
+    appointments: List[Appointment] = Field(default_factory=list)
 
     class Config:
         orm_mode = True
@@ -54,7 +54,7 @@ class OwnerCreate(OwnerBase):
 
 class Owner(OwnerBase):
     id: int
-    pets: List[Pet] = []
+    pets: List[Pet] = Field(default_factory=list)
 
     class Config:
         orm_mode = True

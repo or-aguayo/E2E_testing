@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
@@ -19,8 +19,12 @@ app.add_middleware(
 
 
 @app.get("/owners", response_model=list[schemas.Owner])
-def list_owners(db: Session = Depends(get_db)):
-    return crud.get_owners(db)
+def list_owners(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, gt=0, le=500),
+    db: Session = Depends(get_db),
+):
+    return crud.get_owners(db, skip=skip, limit=limit)
 
 
 @app.post("/owners", response_model=schemas.Owner, status_code=201)
@@ -45,11 +49,16 @@ def create_pet(owner_id: int, pet: schemas.PetCreate, db: Session = Depends(get_
 
 
 @app.get("/owners/{owner_id}/pets", response_model=list[schemas.Pet])
-def list_pets_for_owner(owner_id: int, db: Session = Depends(get_db)):
+def list_pets_for_owner(
+    owner_id: int,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, gt=0, le=500),
+    db: Session = Depends(get_db),
+):
     owner = crud.get_owner(db, owner_id)
     if owner is None:
         raise HTTPException(status_code=404, detail="Owner not found")
-    return crud.get_pets_by_owner(db, owner_id)
+    return crud.get_pets_by_owner(db, owner_id, skip=skip, limit=limit)
 
 
 @app.get("/pets/{pet_id}", response_model=schemas.Pet)
@@ -73,13 +82,22 @@ def create_appointment(pet_id: int, appointment: schemas.AppointmentCreate, db: 
 
 
 @app.get("/pets/{pet_id}/appointments", response_model=list[schemas.Appointment])
-def list_appointments_for_pet(pet_id: int, db: Session = Depends(get_db)):
+def list_appointments_for_pet(
+    pet_id: int,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, gt=0, le=500),
+    db: Session = Depends(get_db),
+):
     pet = crud.get_pet(db, pet_id)
     if pet is None:
         raise HTTPException(status_code=404, detail="Pet not found")
-    return crud.get_appointments_for_pet(db, pet_id)
+    return crud.get_appointments_for_pet(db, pet_id, skip=skip, limit=limit)
 
 
 @app.get("/appointments", response_model=list[schemas.Appointment])
-def list_appointments(db: Session = Depends(get_db)):
-    return crud.get_appointments(db)
+def list_appointments(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, gt=0, le=500),
+    db: Session = Depends(get_db),
+):
+    return crud.get_appointments(db, skip=skip, limit=limit)
